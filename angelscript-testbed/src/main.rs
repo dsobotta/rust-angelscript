@@ -1,9 +1,5 @@
 
 
-// engine
-// AS_API asIScriptengine *asCreateScriptengine(asDWORD version);
-// AS_API const char      *asGetLibraryVersion();
-// AS_API const char      *asGetLibraryOptions();
 
 pub mod angelscript {
 
@@ -12,9 +8,39 @@ pub mod angelscript {
         use std::os::raw::c_char;
         use std::ffi::CStr;
 
-        //pub struct Scriptengine {
-            //asIScriptengine: *i32,
-        //}
+        pub const ANGELSCRIPT_VERSION: u32 = 23102;
+        type asDWORD = ::std::os::raw::c_uint;
+        type asPWORD = usize;
+
+        //#[derive(Debug, Copy, Clone)]
+        #[repr(C)]
+        #[link(name="angelscript_c", kind="static")]
+        struct asIScriptEngine {
+            _unused: [u8; 0],
+        }
+
+        pub struct ScriptEngine {
+            engine: *mut asIScriptEngine
+        }
+
+        impl ScriptEngine {
+            pub fn new() -> ScriptEngine {
+                extern "C" {
+                    #[link(name="angelscript_c", kind="static")]
+                    fn asCreateScriptEngine(version: asDWORD) -> *mut asIScriptEngine;
+                }
+
+                return ScriptEngine {
+                    engine: unsafe { asCreateScriptEngine(ANGELSCRIPT_VERSION) }
+                }
+            }
+
+            // pub fn get_engine_property(&mut self, ) {
+            //     extern "C" {
+            //         fn asEngine_GetEngineProperty(e: *mut asIScriptEngine, property: asEEngineProp) -> asPWORD;
+            //     }
+            // }
+        }
 
         fn read_cstring(c_buf: *const c_char) -> String {
 
@@ -55,4 +81,7 @@ fn main() {
 
     let as_options: String = angelscript::engine::get_library_options();
     println!("Angelscript Library Options: {}", as_options);
+
+    let engine = angelscript::engine::ScriptEngine::new();
+    
 }
