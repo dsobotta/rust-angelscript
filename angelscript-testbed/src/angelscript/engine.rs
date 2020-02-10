@@ -10,6 +10,8 @@ pub struct ScriptEngine {
     engine: *mut asIScriptEngine
 }
 
+pub type ASMessageCallbackFunc = unsafe extern "C" fn(*const asSMessageInfo, *const std::os::raw::c_void);
+
 impl ScriptEngine {
     pub fn new() -> ScriptEngine {
         return ScriptEngine {
@@ -22,9 +24,14 @@ impl ScriptEngine {
         return count as u32;
     }
 
-    pub fn set_message_callback(&mut self, callback: &asFUNCTION_t) {
+    pub fn set_message_callback(&mut self, callback: ASMessageCallbackFunc) {
+
+        type OptCallback = std::option::Option<ASMessageCallbackFunc>;
+        let base_func: OptCallback = Some(callback);
+        let c_func = unsafe {std::mem::transmute::<OptCallback, asFUNCTION_t>(base_func) };
+
         let nullptr: *mut std::ffi::c_void = std::ptr::null_mut();
-        let _result = unsafe { asEngine_SetMessageCallback(self.engine, *callback, nullptr, asECallConvTypes_asCALL_CDECL) };
+        let _result = unsafe { asEngine_SetMessageCallback(self.engine, c_func, nullptr, asECallConvTypes_asCALL_CDECL) };
 
     }
 
