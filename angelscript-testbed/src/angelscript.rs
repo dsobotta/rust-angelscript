@@ -2,11 +2,12 @@
 pub mod types;
 pub mod engine;
 mod engine_c;
+pub mod engine_macros;
 
 use std::os::raw::c_char;
 use std::ffi::CStr;
 
-fn read_cstring(c_buf: *const c_char) -> String {
+pub fn read_cstring(c_buf: *const c_char) -> String {
 
     let c_str: &CStr = unsafe { CStr::from_ptr(c_buf) };
     let str_slice: &str = c_str.to_str().unwrap();
