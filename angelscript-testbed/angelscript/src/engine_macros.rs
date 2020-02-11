@@ -7,7 +7,7 @@ macro_rules! as_send_message {
         $message: expr
     ) => {
         //TODO: do something with result
-        let _result = $crate::angelscript::engine::ScriptEngine::send_message(
+        let _result = angelscript::engine::ScriptEngine::send_message(
             &mut $engine, 
             file!(), line!(), column!(), 
             $msg_type, 
@@ -18,20 +18,20 @@ macro_rules! as_send_message {
 #[macro_export]
 macro_rules! as_log_debug {
     ( $engine: expr, $message: expr ) => {
-        as_send_message!($engine, $crate::angelscript::types::asEMsgType_asMSGTYPE_INFORMATION, $message);
+        angelscript::as_send_message!($engine, angelscript_sys::c_types::asEMsgType_asMSGTYPE_INFORMATION, $message);
     }
 }
 
 #[macro_export]
 macro_rules! as_log_warning {
     ( $engine: expr, $message: expr ) => {
-        as_send_message!($engine, $crate::angelscript::types::asEMsgType_asMSGTYPE_WARNING, $message);
+        angelscript::as_send_message!($engine, angelscript_sys::c_types::asEMsgType_asMSGTYPE_WARNING, $message);
     }
 }
 
 #[macro_export]
 macro_rules! as_log_error {
     ( $engine: expr, $message: expr ) => {
-        as_send_message!($engine, $crate::angelscript::types::asEMsgType_asMSGTYPE_ERROR, $message);
+        angelscript::as_send_message!($engine, angelscript_sys::c_types::asEMsgType_asMSGTYPE_ERROR, $message);
     }
 }

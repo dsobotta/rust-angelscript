@@ -1,6 +1,6 @@
-use crate::angelscript::types::*;
-use crate::angelscript::engine_c::*;
-use crate::angelscript::read_cstring;
+use angelscript_sys::c_types::*;
+use angelscript_sys::c_engine::*;
+use crate::read_cstring;
 
 use std::ffi::CString;
 use std::ffi::c_void;
@@ -62,7 +62,7 @@ impl ScriptEngine {
         self.msg_callback = Some(callback);
 
         type InternalCallback = Option<unsafe extern "C" fn(*const asSMessageInfo, *const c_void)>;        
-        let base_func: InternalCallback = Some(crate::angelscript::engine::ScriptEngine::cvoid_msg_callback);
+        let base_func: InternalCallback = Some(crate::engine::ScriptEngine::cvoid_msg_callback);
         let c_func = unsafe {std::mem::transmute::<InternalCallback, asFUNCTION_t>(base_func) };
         let c_self: *mut c_void = self as *mut _ as *mut c_void;
         let _result = unsafe { asEngine_SetMessageCallback(self.engine, c_func, c_self, asECallConvTypes_asCALL_CDECL) };

@@ -1,14 +1,7 @@
-[package]
-name = "angelscript-testbed"
-version = "0.1.0"
-authors = ["Dusten Sobotta <dusten@sentinel-engine.org>"]
-edition = "2018"
-build = "build.rs"
+[workspace]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[dependencies]
-
-
-[build-dependencies]
-cmake = "0.1.31"
+members = [
+    "angelscript-sys",
+    "angelscript",
+    "test-app",
+]
