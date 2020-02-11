@@ -18,20 +18,20 @@ macro_rules! as_send_message {
 #[macro_export]
 macro_rules! as_log_debug {
     ( $engine: expr, $message: expr ) => {
-        as_send_message!($engine, asEMsgType_asMSGTYPE_INFORMATION, $message);
+        as_send_message!($engine, $crate::angelscript::types::asEMsgType_asMSGTYPE_INFORMATION, $message);
     }
 }
 
 #[macro_export]
 macro_rules! as_log_warning {
     ( $engine: expr, $message: expr ) => {
-        as_send_message!($engine, asEMsgType_asMSGTYPE_WARNING, $message);
+        as_send_message!($engine, $crate::angelscript::types::asEMsgType_asMSGTYPE_WARNING, $message);
     }
 }
 
 #[macro_export]
 macro_rules! as_log_error {
     ( $engine: expr, $message: expr ) => {
-        as_send_message!($engine, asEMsgType_asMSGTYPE_ERROR, $message);
+        as_send_message!($engine, $crate::angelscript::types::asEMsgType_asMSGTYPE_ERROR, $message);
     }
 }

@@ -1,21 +1,15 @@
 pub mod angelscript;
 
-use angelscript::read_cstring;
-use angelscript::types::*;
+use angelscript::engine::MessageInfo;
 
-unsafe extern "C" fn msg_callback(msg_ptr: *const asSMessageInfo, _params: *const std::os::raw::c_void) {
-    if let Some(msg) = msg_ptr.as_ref() {
-        let section = read_cstring(msg.section);
-        let row = msg.row as u32;
-        let col = msg.col as u32;
-        let message = read_cstring(msg.message);
-        let prefix = match msg.type_ {
-            0 => "[ERROR]",
-            1 => "[WARNING]",
-            _ => "[DEBUG]"
-        };
-        println!("{} ({}, {}) : {} : {}", section, row, col, prefix, message);
-    }
+fn msg_callback(msg: MessageInfo) {
+    let prefix = match msg.msg_type {
+        0 => "[ERROR]",
+        1 => "[WARNING]",
+        _ => "[DEBUG]"
+    };
+
+    println!("{} ({}, {}) : {} : {}", msg.section, msg.row, msg.col, prefix, msg.message);
 }
 
 fn main() {
@@ -34,7 +28,7 @@ fn main() {
 
     engine.set_message_callback(msg_callback);
 
-    engine.send_message("section", 0, 1, asEMsgType_asMSGTYPE_INFORMATION, "direct engine message");
+    engine.send_message("section", 0, 1, crate::angelscript::types::asEMsgType_asMSGTYPE_INFORMATION, "direct engine message");
 
     as_log_debug!(engine, "macro debug message!");
     as_log_warning!(engine, "macro warning message!");
