@@ -1,6 +1,9 @@
 use angelscript_sys::c_types::*;
 use angelscript_sys::c_engine::*;
+
+use crate::types::EGMFlags;
 use crate::read_cstring;
+use crate::module::ScriptModule;
 
 use std::ffi::CString;
 use std::ffi::c_void;
@@ -51,12 +54,6 @@ impl ScriptEngine {
         }
     }
 
-    pub fn get_global_function_count(&self) -> u32 {
-        
-        let count = unsafe { asEngine_GetGlobalFunctionCount(self.engine) };
-        return count as u32;
-    }
-
     pub fn set_message_callback(&mut self, callback: ASMessageCallbackFunc) {
 
         self.msg_callback = Some(callback);
@@ -78,5 +75,18 @@ impl ScriptEngine {
 
         //TODO: do something with the result.
     }
+
+    pub fn get_module(&mut self, module: &str, flag: EGMFlags) -> Option<ScriptModule> {
+        let c_module_name = CString::new(module).unwrap();
+        let c_script_module = unsafe { asEngine_GetModule(self.engine, c_module_name.as_ptr(), flag as u32) };
+        return ScriptModule::new(c_script_module);
+    }
+
+    pub fn get_global_function_count(&self) -> u32 {
+        
+        let count = unsafe { asEngine_GetGlobalFunctionCount(self.engine) };
+        return count as u32;
+    }
+
 
 }

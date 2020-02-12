@@ -1,3 +1,4 @@
+use angelscript::types::*;
 use angelscript::engine::MessageInfo;
 use angelscript::as_log_debug;
 use angelscript::as_log_warning;
@@ -34,4 +35,8 @@ fn main() {
     as_log_debug!(engine, "macro debug message!");
     as_log_warning!(engine, "macro warning message!");
     as_log_error!(engine, "macro error message!");
+
+    let module = engine.get_module("test-module", EGMFlags::AlwaysCreate);
+    println!("module creation successful: {}", module.is_some());
+
 }

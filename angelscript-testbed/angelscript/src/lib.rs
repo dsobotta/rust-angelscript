@@ -1,8 +1,10 @@
 use std::os::raw::c_char;
 use std::ffi::CStr;
 
+pub mod types;
 pub mod engine;
 pub mod engine_macros;
+pub mod module;
 
 pub fn read_cstring(c_buf: *const c_char) -> String {
 
