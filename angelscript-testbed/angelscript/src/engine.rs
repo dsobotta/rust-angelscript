@@ -70,8 +70,8 @@ impl ScriptEngine {
 
     pub fn send_message(&mut self, section: &str, row: u32, col: u32, msg_type: asEMsgType, message: &str) -> EReturnCodes {
 
-        let c_section = CString::new(section).expect("CString::new failed");
-        let c_message = CString::new(message).expect("CString::new failed");
+        let c_section = CString::new(section).unwrap();
+        let c_message = CString::new(message).unwrap();
         let result = unsafe { asEngine_WriteMessage(self.engine, c_section.as_ptr(), row as c_int, col as c_int, msg_type, c_message.as_ptr()) };
 
         return EReturnCodes::from_i32(result);

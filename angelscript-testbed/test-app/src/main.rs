@@ -40,6 +40,16 @@ fn main() {
     as_log_error!(engine, "macro error message!");
 
     let module = engine.get_module("test-module", EGMFlags::AlwaysCreate);
-    println!("module creation successful: {}", module.is_some());
+    match module {
+        None => panic!("failed to get module"),
+        Some(mut m) => {
+            let int_main_src = "int main() { return 0; }";
+            let r = m.add_script_section("intmain", int_main_src);
+            check_ok!(r);
+    
+            let r = m.build();
+            check_ok!(r);
+        }
+    }
 
 }

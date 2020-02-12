@@ -17,7 +17,9 @@ extern "C" {
         m: *mut asIScriptModule
     ) -> *const ::std::os::raw::c_char;
 
-    pub fn asModule_Discard(m: *mut asIScriptModule);
+    pub fn asModule_Discard(
+        m: *mut asIScriptModule
+    );
 
     pub fn asModule_AddScriptSection(
         m: *mut asIScriptModule,
