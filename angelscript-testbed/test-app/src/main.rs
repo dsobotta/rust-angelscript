@@ -3,6 +3,7 @@ use angelscript::engine::MessageInfo;
 use angelscript::as_log_debug;
 use angelscript::as_log_warning;
 use angelscript::as_log_error;
+use angelscript::check_ok;
 
 fn msg_callback(msg: MessageInfo) {
     let prefix = match msg.msg_type {
@@ -28,9 +29,11 @@ fn main() {
     println!("Num registered global functions: {}", glob_func_count);
 
 
-    engine.set_message_callback(msg_callback);
+    let r = engine.set_message_callback(msg_callback);
+    check_ok!(r);
 
-    engine.send_message("section", 0, 1, angelscript_sys::c_types::asEMsgType_asMSGTYPE_INFORMATION, "direct engine message");
+    let r = engine.send_message("section", 0, 1, angelscript_sys::c_types::asEMsgType_asMSGTYPE_INFORMATION, "direct engine message");
+    check_ok!(r);
 
     as_log_debug!(engine, "macro debug message!");
     as_log_warning!(engine, "macro warning message!");

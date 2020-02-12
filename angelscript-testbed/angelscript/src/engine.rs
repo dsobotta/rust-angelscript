@@ -1,6 +1,7 @@
 use angelscript_sys::c_types::*;
 use angelscript_sys::c_engine::*;
 
+use crate::types::EReturnCodes;
 use crate::types::EGMFlags;
 use crate::read_cstring;
 use crate::module::ScriptModule;
@@ -54,7 +55,7 @@ impl ScriptEngine {
         }
     }
 
-    pub fn set_message_callback(&mut self, callback: ASMessageCallbackFunc) {
+    pub fn set_message_callback(&mut self, callback: ASMessageCallbackFunc) -> EReturnCodes {
 
         self.msg_callback = Some(callback);
 
@@ -62,21 +63,22 @@ impl ScriptEngine {
         let base_func: InternalCallback = Some(crate::engine::ScriptEngine::cvoid_msg_callback);
         let c_func = unsafe {std::mem::transmute::<InternalCallback, asFUNCTION_t>(base_func) };
         let c_self: *mut c_void = self as *mut _ as *mut c_void;
-        let _result = unsafe { asEngine_SetMessageCallback(self.engine, c_func, c_self, asECallConvTypes_asCALL_CDECL) };
+        let result = unsafe { asEngine_SetMessageCallback(self.engine, c_func, c_self, asECallConvTypes_asCALL_CDECL) };
 
-        //TODO: do something with the result.
+        return EReturnCodes::from_i32(result);
     }
 
-    pub fn send_message(&mut self, section: &str, row: u32, col: u32, msg_type: asEMsgType, message: &str) {
+    pub fn send_message(&mut self, section: &str, row: u32, col: u32, msg_type: asEMsgType, message: &str) -> EReturnCodes {
 
         let c_section = CString::new(section).expect("CString::new failed");
         let c_message = CString::new(message).expect("CString::new failed");
-        let _result = unsafe { asEngine_WriteMessage(self.engine, c_section.as_ptr(), row as c_int, col as c_int, msg_type, c_message.as_ptr()) };
+        let result = unsafe { asEngine_WriteMessage(self.engine, c_section.as_ptr(), row as c_int, col as c_int, msg_type, c_message.as_ptr()) };
 
-        //TODO: do something with the result.
+        return EReturnCodes::from_i32(result);
     }
 
     pub fn get_module(&mut self, module: &str, flag: EGMFlags) -> Option<ScriptModule> {
+        
         let c_module_name = CString::new(module).unwrap();
         let c_script_module = unsafe { asEngine_GetModule(self.engine, c_module_name.as_ptr(), flag as u32) };
         return ScriptModule::new(c_script_module);

@@ -35,3 +35,14 @@ macro_rules! as_log_error {
         angelscript::as_send_message!($engine, angelscript_sys::c_types::asEMsgType_asMSGTYPE_ERROR, $message);
     }
 }
+
+#[macro_export]
+macro_rules! check_ok {
+    ( $ret_code: expr ) => {
+        let code: angelscript::types::EReturnCodes = $ret_code;
+        match code {
+            angelscript::types::EReturnCodes::Success => (),
+            _ => panic!("AngelScript failure!  r = {}", code as i32)
+        }
+    }
+}
