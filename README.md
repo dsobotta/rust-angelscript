@@ -1,8 +1,4 @@
-# rust-angelscript
-
-==============================
-          FOREWARD
-==============================
+# RUST-ANGELSCRIPT
 
 Rust-AngelScript is a rust wrapper to the AngelCode Scripting Library
 
@@ -14,9 +10,7 @@ under the terms of the MIT license below.
 
 
 
-==============================
-         MIT LICENSE
-==============================
+# MIT LICENSE
 
 Rust-AngelScript
 
@@ -43,9 +37,7 @@ SOFTWARE.
 
 
 
-==============================
-         ZLIB LICENSE
-==============================
+# ZLIB LICENSE
 
 AngelCode Scripting Library
 
