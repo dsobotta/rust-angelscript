@@ -11,6 +11,6 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-angelscript-sys = { path = "../angelscript-sys" }
+angelscript-sys = { path = "../angelscript-sys", version = "0.1.1" }
 
 [build-dependencies]
