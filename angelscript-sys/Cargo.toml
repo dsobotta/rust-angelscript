@@ -1,11 +1,11 @@
 [package]
 name = "angelscript-sys"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Dusten Sobotta <dusten@sentinel-engine.org>"]
 description = "Rust FFI bindings to the AngelScript C/C++ library."
 repository = "https://github.com/dsobotta/rust-angelscript"
 keywords = ["bindings", "ffi", "angelscript"]
-license = "MIT"
+license-file = "LICENSE"
 edition = "2018"
 build = "build.rs"
 
