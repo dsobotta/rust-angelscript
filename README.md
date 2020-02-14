@@ -15,7 +15,6 @@ under the terms of the MIT license below.
 Rust-AngelScript
 
 Copyright (c) 2020 Dusten Sobotta
-https://github.com/dsobotta/rust-angelscript
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
