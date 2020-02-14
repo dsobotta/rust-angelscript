@@ -2,6 +2,10 @@
 name = "angelscript"
 version = "0.1.0"
 authors = ["Dusten Sobotta <dusten@sentinel-engine.org>"]
+description = "Rust wrapper to the AngelScript C/C++ library."
+repository = "https://github.com/dsobotta/rust-angelscript"
+keywords = ["bindings", "angelscript"]
+license = "MIT"
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
