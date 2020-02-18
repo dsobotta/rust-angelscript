@@ -18,21 +18,21 @@ macro_rules! as_send_message {
 #[macro_export]
 macro_rules! as_log_debug {
     ( $engine: expr, $message: expr ) => {
-        angelscript::as_send_message!($engine, angelscript_sys::c_types::asEMsgType_asMSGTYPE_INFORMATION, $message);
+        angelscript::as_send_message!($engine, angelscript::types::EMsgType::Information, $message);
     }
 }
 
 #[macro_export]
 macro_rules! as_log_warning {
     ( $engine: expr, $message: expr ) => {
-        angelscript::as_send_message!($engine, angelscript_sys::c_types::asEMsgType_asMSGTYPE_WARNING, $message);
+        angelscript::as_send_message!($engine, angelscript::types::EMsgType::Warning, $message);
     }
 }
 
 #[macro_export]
 macro_rules! as_log_error {
     ( $engine: expr, $message: expr ) => {
-        angelscript::as_send_message!($engine, angelscript_sys::c_types::asEMsgType_asMSGTYPE_ERROR, $message);
+        angelscript::as_send_message!($engine, angelscript::types::EMsgType::Error, $message);
     }
 }
 
@@ -42,7 +42,7 @@ macro_rules! check_ok {
         let code: angelscript::types::EReturnCodes = $ret_code;
         match code {
             angelscript::types::EReturnCodes::Success => (),
-            _ => panic!("AngelScript failure!  r = {}", code as i32)
+            _ => panic!("AngelScript failure!  r = {}", code.to_i32())
         }
     }
 }

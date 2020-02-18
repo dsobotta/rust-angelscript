@@ -32,7 +32,7 @@ fn main() {
     let r = engine.set_message_callback(msg_callback);
     check_ok!(r);
 
-    let r = engine.send_message("section", 0, 1, angelscript_sys::c_types::asEMsgType_asMSGTYPE_INFORMATION, "direct engine message");
+    let r = engine.send_message("section", 0, 1, EMsgType::Warning, "direct engine message");
     check_ok!(r);
 
     as_log_debug!(engine, "macro debug message!");
