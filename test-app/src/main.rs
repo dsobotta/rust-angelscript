@@ -39,6 +39,7 @@ fn main() {
     as_log_warning!(engine, "macro warning message!");
     as_log_error!(engine, "macro error message!");
 
+    let mut main_func: Option<angelscript::function::ScriptFunction> = None;
     let module = engine.get_module("test-module", EGMFlags::AlwaysCreate);
     match module {
         None => panic!("failed to get module"),
@@ -46,12 +47,14 @@ fn main() {
 
             as_log_debug!(engine, "successfully loaded test-module");
 
-            let int_main_src = "int main() { return 0; }";
+            let int_main_src = "int main() { return 57; }";
             let r = m.add_script_section("intmain", int_main_src);
             check_ok!(r);
     
             let r = m.build();
             check_ok!(r);
+
+            main_func = m.get_function_by_decl("int main()");
         }
     }
 
@@ -59,7 +62,17 @@ fn main() {
     match context {
         None => panic!("failed to create context"),
         Some(mut ctx) => {
+            
             as_log_debug!(engine, "successfully created context");
+
+            ctx.prepare(main_func);
+
+            let r = ctx.execute();
+            assert_eq!(r.to_u32(), EContextState::ExecutionFinished.to_u32());
+
+            let val = ctx.get_return_dword();
+
+            println!("int main() result = {}", val);
         }
     }
 }

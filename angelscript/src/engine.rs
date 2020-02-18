@@ -96,5 +96,4 @@ impl ScriptEngine {
         return count as u32;
     }
 
-
 }
