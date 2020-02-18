@@ -43,6 +43,9 @@ fn main() {
     match module {
         None => panic!("failed to get module"),
         Some(mut m) => {
+
+            as_log_debug!(engine, "successfully loaded test-module");
+
             let int_main_src = "int main() { return 0; }";
             let r = m.add_script_section("intmain", int_main_src);
             check_ok!(r);
@@ -52,4 +55,11 @@ fn main() {
         }
     }
 
+    let context = engine.create_context();
+    match context {
+        None => panic!("failed to create context"),
+        Some(mut ctx) => {
+            as_log_debug!(engine, "successfully created context");
+        }
+    }
 }

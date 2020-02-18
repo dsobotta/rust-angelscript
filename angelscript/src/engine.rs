@@ -4,6 +4,7 @@ use angelscript_sys::c_engine::*;
 use crate::types::*;
 use crate::read_cstring;
 use crate::module::ScriptModule;
+use crate::context::ScriptContext;
 
 use std::ffi::CString;
 use std::ffi::c_void;
@@ -81,6 +82,12 @@ impl ScriptEngine {
         let c_module_name = CString::new(module).unwrap();
         let c_script_module = unsafe { asEngine_GetModule(self.engine, c_module_name.as_ptr(), flag.to_u32()) };
         return ScriptModule::new(c_script_module);
+    }
+
+    pub fn create_context(&mut self) -> Option<ScriptContext> {
+        
+        let c_context = unsafe { asEngine_CreateContext(self.engine) };
+        return ScriptContext::new(c_context);
     }
 
     pub fn get_global_function_count(&self) -> u32 {

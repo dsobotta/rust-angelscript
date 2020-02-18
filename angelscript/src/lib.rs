@@ -5,6 +5,7 @@ pub mod types;
 pub mod engine;
 pub mod engine_macros;
 pub mod module;
+pub mod context;
 
 pub fn read_cstring(c_buf: *const c_char) -> String {
 
