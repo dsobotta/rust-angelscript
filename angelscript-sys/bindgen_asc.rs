@@ -435,7 +435,7 @@ fn bindgen_test_layout_asSMessageInfo() {
 }
 
 ////////////////////////
-/// ???????????
+/// AS_CORE
 ////////////////////////
 extern "C" {
     pub fn asCreateScriptEngine(version: asDWORD) -> *mut asIScriptEngine;

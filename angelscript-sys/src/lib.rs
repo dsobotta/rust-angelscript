@@ -1,5 +1,9 @@
 pub mod c_types;
+pub mod c_core;
 pub mod c_engine;
 pub mod c_module;
 pub mod c_context;
+pub mod c_generic;
+pub mod c_object;
+pub mod c_typeinfo;
 pub mod c_function;
