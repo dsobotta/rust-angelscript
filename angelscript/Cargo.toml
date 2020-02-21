@@ -1,6 +1,6 @@
 [package]
 name = "angelscript"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Dusten Sobotta <dusten@sentinel-engine.org>"]
 description = "Rust wrapper to the AngelScript C/C++ library."
 repository = "https://github.com/dsobotta/rust-angelscript"
@@ -11,6 +11,6 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-angelscript-sys = { path = "../angelscript-sys", version = "0.1.1" }
+angelscript-sys = { path = "../angelscript-sys", version = "0.2.312" }
 
 [build-dependencies]
