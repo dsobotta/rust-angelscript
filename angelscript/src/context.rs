@@ -4,10 +4,11 @@ use angelscript_sys::c_context::*;
 use crate::types::EReturnCodes;
 use crate::types::EContextState;
 use crate::function::ScriptFunction;
+use crate::object::ScriptObject;
 //use crate::read_cstring;
 
 //use std::ffi::CString;
-// use std::ffi::c_void;
+use std::ffi::c_void;
 // use std::os::raw::c_char;
 // use std::os::raw::c_int;
 
@@ -26,6 +27,7 @@ impl ScriptContext {
     }
 
     pub fn prepare(&mut self, function: Option<ScriptFunction>) -> EReturnCodes {
+
         match function {
             None => return EReturnCodes::NoFunction,
             Some(func) => {
@@ -35,6 +37,13 @@ impl ScriptContext {
         }
     }
 
+    pub fn set_object(&mut self, mut object: &mut ScriptObject) -> EReturnCodes {
+
+        let c_object: *mut c_void = object.obj as *mut _ as *mut c_void;
+        let result = unsafe { asContext_SetObject(self.context, c_object) };
+        return EReturnCodes::from_i32(result);
+    }
+
     pub fn execute(&mut self) -> EContextState {
 
         let result = unsafe { asContext_Execute(self.context) };
@@ -42,7 +51,17 @@ impl ScriptContext {
     }
 
     pub fn get_return_dword(&mut self) -> u32 {
+        
         let ret = unsafe { asContext_GetReturnDWord(self.context) };
         return ret as u32;
+    }
+
+    pub fn get_return_object(&mut self) -> Option<ScriptObject> {
+
+        let ret = unsafe { asContext_GetAddressOfReturnValue(self.context) };
+        let c_obj: *mut *mut asIScriptObject = ret as *mut *mut _ as *mut *mut asIScriptObject;
+
+        //TODO: make this safe!
+        return ScriptObject::new( unsafe {*c_obj} );
     }
 }

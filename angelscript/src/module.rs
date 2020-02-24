@@ -3,6 +3,7 @@ use angelscript_sys::c_module::*;
 
 use crate::types::EReturnCodes;
 use crate::function::ScriptFunction;
+use crate::typeinfo::TypeInfo;
 //use crate::read_cstring;
 
 use std::ffi::CString;
@@ -44,5 +45,12 @@ impl ScriptModule {
         let c_decl = CString::new(decl).unwrap();
         let c_function = unsafe { asModule_GetFunctionByDecl(self.module, c_decl.as_ptr()) };
         return ScriptFunction::new(c_function);
+    }
+
+    pub fn get_typeinfo_by_decl(&mut self, decl: &str) -> Option<TypeInfo> {
+
+        let c_decl = CString::new(decl).unwrap();
+        let c_typeinfo = unsafe { asModule_GetTypeInfoByDecl(self.module, c_decl.as_ptr()) };
+        return TypeInfo::new(c_typeinfo);
     }
 }

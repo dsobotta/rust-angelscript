@@ -1,5 +1,8 @@
 use angelscript::types::*;
 use angelscript::engine::MessageInfo;
+use angelscript::engine::ScriptEngine;
+use angelscript::module::ScriptModule;
+use angelscript::context::ScriptContext;
 use angelscript::as_log_debug;
 use angelscript::as_log_warning;
 use angelscript::as_log_error;
@@ -15,7 +18,7 @@ fn msg_callback(msg: MessageInfo) {
     println!("{} ({}, {}) : {} : {}", msg.section, msg.row, msg.col, prefix, msg.message);
 }
 
-fn main() {
+fn test_core(engine: & ScriptEngine) {
 
     let as_version: String = angelscript::get_library_version();
     println!("Angelscript Version: {}", as_version);
@@ -23,11 +26,11 @@ fn main() {
     let as_options: String = angelscript::get_library_options();
     println!("Angelscript Library Options: {}", as_options);
 
-    let mut engine = angelscript::engine::ScriptEngine::new();
-    
     let glob_func_count = engine.get_global_function_count();
     println!("Num registered global functions: {}", glob_func_count);
+}
 
+fn test_callback(mut engine: &mut ScriptEngine) {
 
     let r = engine.set_message_callback(msg_callback);
     check_ok!(r);
@@ -38,41 +41,84 @@ fn main() {
     as_log_debug!(engine, "macro debug message!");
     as_log_warning!(engine, "macro warning message!");
     as_log_error!(engine, "macro error message!");
+}
 
-    let mut main_func: Option<angelscript::function::ScriptFunction> = None;
-    let module = engine.get_module("test-module", EGMFlags::AlwaysCreate);
-    match module {
-        None => panic!("failed to get module"),
-        Some(mut m) => {
-
-            as_log_debug!(engine, "successfully loaded test-module");
-
-            let int_main_src = "int main() { return 57; }";
-            let r = m.add_script_section("intmain", int_main_src);
-            check_ok!(r);
+fn test_script_main(mut engine: &mut ScriptEngine, mut ctx: &mut ScriptContext) {
     
-            let r = m.build();
-            check_ok!(r);
+    let mut module = engine.get_module("main", EGMFlags::AlwaysCreate).unwrap();
 
-            main_func = m.get_function_by_decl("int main()");
-        }
-    }
+    let src = "int main() { return 57; }";
+    let r = module.add_script_section("intmain", src);
+    check_ok!(r);
 
-    let context = engine.create_context();
-    match context {
-        None => panic!("failed to create context"),
-        Some(mut ctx) => {
-            
-            as_log_debug!(engine, "successfully created context");
+    let r = module.build();
+    check_ok!(r);
 
-            ctx.prepare(main_func);
+    let main_func = module.get_function_by_decl("int main()");
+    let r = ctx.prepare(main_func);
+    check_ok!(r);
 
-            let r = ctx.execute();
-            assert_eq!(r.to_u32(), EContextState::ExecutionFinished.to_u32());
+    let r = ctx.execute();
+    assert_eq!(r.to_u32(), EContextState::ExecutionFinished.to_u32());
 
-            let val = ctx.get_return_dword();
+    let val = ctx.get_return_dword();
 
-            println!("int main() result = {}", val);
-        }
-    }
+    println!("int main() result = {}", val);
+}
+
+fn test_script_class(mut engine: &mut ScriptEngine, mut ctx: &mut ScriptContext) {
+    
+    let mut module = engine.get_module("class", EGMFlags::AlwaysCreate).unwrap();
+
+    let src = "
+        class Foo { 
+            Foo() {} 
+            int Bar() { return 53; } 
+        }";
+    
+    let r = module.add_script_section("Foo", src);
+    check_ok!(r);
+
+    let r = module.build();
+    check_ok!(r);
+
+    let mut typeinfo = module.get_typeinfo_by_decl("Foo").unwrap();
+    let factory = typeinfo.get_factory_by_decl("Foo @Foo()");
+
+    let r = ctx.prepare(factory);
+    check_ok!(r);
+
+    let r = ctx.execute();
+    assert_eq!(r.to_u32(), EContextState::ExecutionFinished.to_u32());
+
+    let mut obj = ctx.get_return_object().unwrap();
+    
+    let func = typeinfo.get_method_by_decl("int Bar()");
+
+    let r = ctx.prepare(func);
+    check_ok!(r);
+
+    let r = ctx.set_object(&mut obj);
+    check_ok!(r);
+
+    let r = ctx.execute();
+    assert_eq!(r.to_u32(), EContextState::ExecutionFinished.to_u32());
+
+    let val = ctx.get_return_dword();
+
+    println!("Foo::Bar() result = {}", val);
+}
+
+fn main() {
+
+    let mut engine = ScriptEngine::new();
+    let mut ctx = engine.create_context().unwrap();
+
+    test_callback(&mut engine);
+
+    test_core(&engine);
+
+    test_script_main(&mut engine, &mut ctx);
+
+    test_script_class(&mut engine, &mut ctx);
 }

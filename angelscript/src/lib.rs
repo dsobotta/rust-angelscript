@@ -7,6 +7,8 @@ pub mod engine_macros;
 pub mod module;
 pub mod context;
 pub mod function;
+pub mod typeinfo;
+pub mod object;
 
 pub fn read_cstring(c_buf: *const c_char) -> String {
 
