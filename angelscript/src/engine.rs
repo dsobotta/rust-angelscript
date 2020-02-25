@@ -90,6 +90,28 @@ impl ScriptEngine {
         return ScriptContext::new(c_context);
     }
 
+    pub fn register_interface(&mut self, name: &str) -> EReturnCodes {
+
+        let c_name = CString::new(name).unwrap();
+        let result = unsafe { asEngine_RegisterInterface(self.engine, c_name.as_ptr()) };
+
+        return EReturnCodes::from_i32(result);
+    }
+
+    pub fn register_interface_method(&mut self, intf_name: &str, decl: &str) -> EReturnCodes {
+
+        let c_intf_name = CString::new(intf_name).unwrap();
+        let c_decl = CString::new(decl).unwrap();
+        let result = unsafe { asEngine_RegisterInterfaceMethod(self.engine, c_intf_name.as_ptr(), c_decl.as_ptr()) };
+
+        return EReturnCodes::from_i32(result);
+    }
+
+    pub fn register_global_function(&mut self, decl: &str) -> EReturnCodes {
+        //asEngine_RegisterGlobalFunction(e: *mut asIScriptEngine, declaration: *const ::std::os::raw::c_char, funcPointer: asFUNCTION_t, callConv: asDWORD, auxiliary: *mut ::std::os::raw::c_void)
+        return EReturnCodes::NotSupported;
+    }
+
     pub fn get_global_function_count(&self) -> u32 {
         
         let count = unsafe { asEngine_GetGlobalFunctionCount(self.engine) };

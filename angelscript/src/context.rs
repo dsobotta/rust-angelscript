@@ -61,7 +61,11 @@ impl ScriptContext {
         let ret = unsafe { asContext_GetAddressOfReturnValue(self.context) };
         let c_obj: *mut *mut asIScriptObject = ret as *mut *mut _ as *mut *mut asIScriptObject;
 
-        //TODO: make this safe!
-        return ScriptObject::new( unsafe {*c_obj} );
+        let ptr = match c_obj.is_null() {
+            true => std::ptr::null_mut(),
+            false => unsafe { *c_obj }
+        };
+
+        return ScriptObject::new( ptr );
     }
 }
