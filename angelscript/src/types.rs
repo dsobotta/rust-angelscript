@@ -644,3 +644,8 @@ impl EFuncType {
         return self as i32;
     }
 }
+
+pub struct FuncBindInfo {
+    pub func: asFUNCTION_t,
+    pub as_decl: &'static str,
+}

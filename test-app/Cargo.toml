@@ -7,5 +7,6 @@ build = "build.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [dependencies]
-angelscript = { path = "../angelscript" }
 angelscript-sys = { path = "../angelscript-sys" }
+angelscript = { path = "../angelscript" }
+angelscript_derive = { path = "../angelscript_derive" }

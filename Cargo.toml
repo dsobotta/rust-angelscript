@@ -3,5 +3,6 @@
 members = [
     "angelscript-sys",
     "angelscript",
+    "angelscript_derive",
     "test-app",
 ]

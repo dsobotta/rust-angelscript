@@ -8,6 +8,9 @@ use angelscript::as_log_warning;
 use angelscript::as_log_error;
 use angelscript::check_ok;
 
+#[macro_use]
+extern crate angelscript_derive;
+
 fn msg_callback(msg: MessageInfo) {
     let prefix = match msg.msg_type {
         0 => "[ERROR]",
@@ -109,6 +112,9 @@ fn test_script_class(mut engine: &mut ScriptEngine, mut ctx: &mut ScriptContext)
     println!("Foo::Bar() result = {}", val);
 }
 
+#[as_function]
+fn baz() { println!("baz()"); }
+
 fn main() {
 
     let mut engine = ScriptEngine::new();
@@ -121,4 +127,7 @@ fn main() {
     test_script_main(&mut engine, &mut ctx);
 
     test_script_class(&mut engine, &mut ctx);
+
+    println!("bindingstr = {}", angelscript_bindings::bindinfo_baz.as_decl);
+    unsafe { angelscript_bindings::wrapped_baz(); }
 }
