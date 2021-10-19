@@ -5,6 +5,7 @@ use quote::{quote, format_ident};
 use syn::{parse_macro_input, ItemFn};
 
 
+
 #[proc_macro_attribute]
 pub fn as_function(_attr: TokenStream, input: TokenStream) -> TokenStream {
 
@@ -25,6 +26,8 @@ pub fn as_function(_attr: TokenStream, input: TokenStream) -> TokenStream {
              pub unsafe extern "C" #wrapper_sig {
                  super::#fn_ident( #fn_args )
              }
+            
+            #[allow(non_upper_case_globals)]
             pub static #bindinfo_ident: angelscript::types::FuncBindInfo = angelscript::types::FuncBindInfo {
                 func: None,
                 as_decl: #as_decl,

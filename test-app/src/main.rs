@@ -1,7 +1,7 @@
 use angelscript::types::*;
 use angelscript::engine::MessageInfo;
 use angelscript::engine::ScriptEngine;
-use angelscript::module::ScriptModule;
+//use angelscript::module::ScriptModule;
 use angelscript::context::ScriptContext;
 use angelscript::as_log_debug;
 use angelscript::as_log_warning;
@@ -46,7 +46,7 @@ fn test_callback(mut engine: &mut ScriptEngine) {
     as_log_error!(engine, "macro error message!");
 }
 
-fn test_script_main(mut engine: &mut ScriptEngine, mut ctx: &mut ScriptContext) {
+fn test_script_main(engine: &mut ScriptEngine, ctx: &mut ScriptContext) {
     
     let mut module = engine.get_module("main", EGMFlags::AlwaysCreate).unwrap();
 
@@ -69,7 +69,7 @@ fn test_script_main(mut engine: &mut ScriptEngine, mut ctx: &mut ScriptContext) 
     println!("int main() result = {}", val);
 }
 
-fn test_script_class(mut engine: &mut ScriptEngine, mut ctx: &mut ScriptContext) {
+fn test_script_class(engine: &mut ScriptEngine, ctx: &mut ScriptContext) {
     
     let mut module = engine.get_module("class", EGMFlags::AlwaysCreate).unwrap();
 

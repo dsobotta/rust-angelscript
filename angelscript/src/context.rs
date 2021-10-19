@@ -37,7 +37,7 @@ impl ScriptContext {
         }
     }
 
-    pub fn set_object(&mut self, mut object: &mut ScriptObject) -> EReturnCodes {
+    pub fn set_object(&mut self, object: &mut ScriptObject) -> EReturnCodes {
 
         let c_object: *mut c_void = object.obj as *mut _ as *mut c_void;
         let result = unsafe { asContext_SetObject(self.context, c_object) };

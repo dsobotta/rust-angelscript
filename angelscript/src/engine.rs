@@ -107,7 +107,7 @@ impl ScriptEngine {
         return EReturnCodes::from_i32(result);
     }
 
-    pub fn register_global_function(&mut self, decl: &str) -> EReturnCodes {
+    pub fn register_global_function(&mut self, _decl: &str) -> EReturnCodes {
         //asEngine_RegisterGlobalFunction(e: *mut asIScriptEngine, declaration: *const ::std::os::raw::c_char, funcPointer: asFUNCTION_t, callConv: asDWORD, auxiliary: *mut ::std::os::raw::c_void)
         return EReturnCodes::NotSupported;
     }
